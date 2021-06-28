@@ -9,6 +9,7 @@
 #include <gtkmm/radiobutton.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/label.h>
+#include <glibmm/ustring.h>
 
 #include "board.hpp"
 
@@ -55,6 +56,7 @@ public:
       mReset.signal_clicked().connect([this] { reset(); });
 
       mGrid.attach(mStatus, 5, 0, 2, 1);
+      mStatus.set_label(std::to_string(mBoard.mines_left()) + " mines left");
 
       for(int i = 0; i < width * height; ++i)
         btns.emplace_back(" ");
@@ -96,14 +98,14 @@ public:
 
   void win()
   {
-    mStatus.set_label("You won!");
+    mStatus.set_label("Win!!");
     std::cout << "Win!! \n";
     mDisableClick = true;
   }
 
   void loss()
   {
-    mStatus.set_label("You lost!");
+    mStatus.set_label("Loss!!");
     std::cout << "Loss!! \n";
     mDisableClick = true;
   }
@@ -123,16 +125,17 @@ public:
       }
       btns[n].set_label(Glib::ustring(1, c.val));
     }
+    mStatus.set_label(std::to_string(mBoard.mines_left()) + " mines left");
   }
   void reset()
   {
-    mStatus.set_label("");
     mDisableClick = true;
     for(int i = 0; i < btns.size(); ++i) {
       btns[i].set_label(" ");
       btns[i].set_active(false);
     }
     mBoard = Board(mWidth, mHeight, mMines);
+    mStatus.set_label(std::to_string(mBoard.mines_left()) + " mines left");
     mDisableClick = false;
   }
 };

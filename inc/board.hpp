@@ -28,6 +28,7 @@ class Board {
     Board_state open(int x, int y, std::vector<Change>& changes);
     Board_state mark(int x, int y, std::vector<Change>& changes);
     Board_state hint(std::vector<Change>& changes);
+    int mines_left();
   private:
     void add_mines(int x, int y);
     void count_mines();
@@ -39,6 +40,7 @@ class Board {
     int mMines;
     Matrix mBoard;
     Matrix mCover;
-    int mNOpen = 0;
+    int mNOpen;
+    int mNMarked;
 };
 

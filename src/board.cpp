@@ -11,7 +11,9 @@ Board::Board(int width = 20, int height = 20, int mines = 10)
   mHeight(height),
   mMines(mines),
   mBoard(width, height),
-  mCover(width, height)
+  mCover(width, height),
+  mNOpen(0),
+  mNMarked(0)
 {
 }
 
@@ -29,6 +31,11 @@ char Board::operator()(int x, int y) const
 bool Board::is_win()
 {
   return mMines + mNOpen == mWidth * mHeight;
+}
+
+int Board::mines_left()
+{
+  return mMines - mNMarked;
 }
 
 Board_state Board::open(int x, int y, std::vector<Change>& changes)
@@ -71,9 +78,11 @@ Board_state Board::mark(int x, int y, std::vector<Change>& changes)
   }
   else if(mCover(x, y) == 2) {
     mCover(x, y) = 0;
+    --mNMarked;
     changes.emplace_back(x, y, ' ');
   } else {
     mCover(x, y) = 2;
+    ++mNMarked;
     changes.emplace_back(x, y, 'O');
     if(is_win())
       return Board_state::win;
