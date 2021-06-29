@@ -144,7 +144,7 @@ void Board::add_mines(int x, int y)
   for(int i = 0; i < mMines; ++i) {
     int xx = rand() % mWidth;
     int yy = rand() % mHeight;
-    if(mBoard(xx, yy) == 0 && !(x == xx && y == yy))
+    if(mBoard(xx, yy) == 0 && !(abs(x-xx) < 2 && abs(y-yy) < 2))
       mBoard(xx, yy) = -1;
     else
       --i;
