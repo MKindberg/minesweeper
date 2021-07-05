@@ -78,7 +78,8 @@ Board_state Board::open(int x, int y, std::vector<Change>& changes)
   if(mCover(x, y) == 2) {
     changes.emplace_back(x, y, 'O');
     return Board_state::play;
-  } else if(mCover(x, y) == 1) {
+  }
+  else if(mCover(x, y) == 1) {
     changes.emplace_back(x, y, mBoard(x, y) + '0');
     if(marked_adj(x, y) == mBoard(x, y))
       return open_adj(x, y, changes);
@@ -89,10 +90,12 @@ Board_state Board::open(int x, int y, std::vector<Change>& changes)
   if(mBoard(x, y) == -1) {
     changes.emplace_back(x, y, 'M');
     return Board_state::loss;
-  } else if(is_win()) {
+  }
+  else if(is_win()) {
     changes.emplace_back(x, y, mBoard(x, y) + '0');
     return Board_state::win;
-  } else {
+  }
+  else {
     changes.emplace_back(x, y, mBoard(x, y) + '0');
     // Open all neighbours when a 0 is opened
     if(mBoard(x, y) == 0) {
@@ -127,7 +130,8 @@ Board_state Board::mark(int x, int y, std::vector<Change>& changes)
     mCover(x, y) = 0;
     --mNMarked;
     changes.emplace_back(x, y, ' ');
-  } else {
+  }
+  else {
     mCover(x, y) = 2;
     ++mNMarked;
     changes.emplace_back(x, y, 'O');

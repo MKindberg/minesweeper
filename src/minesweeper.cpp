@@ -83,14 +83,16 @@ public:
 
       if (mRbMark.get_active()) {
         res = mBoard.mark(x, y, changes);
-      } else {
+      }
+      else {
         res = mBoard.open(x, y, changes);
       }
       update(changes);
 
       if(res == Board_state::win) {
         win();
-      } else if(res == Board_state::loss) {
+      }
+      else if(res == Board_state::loss) {
         loss();
       }
     };
@@ -118,7 +120,8 @@ public:
         mDisableClick = true;
         btns[n].set_active(false);
         mDisableClick = false;
-      } else {
+      }
+      else {
         mDisableClick = true;
         btns[n].set_active(true);
         mDisableClick = false;
@@ -149,7 +152,8 @@ int main(int argc, char* argv[])
     std::cout << argv[0] << ' ' << argv[1] << '\n';
     mines = atoi(argv[1]);
     std::cout << "mines: " << mines << '\n';
-  } else if(argc == 3) {
+  }
+  else if(argc == 3) {
     width = atoi(argv[1]);
     height = atoi(argv[2]);
   }
