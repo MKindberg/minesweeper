@@ -17,6 +17,19 @@ Board::Board(int width = 20, int height = 20, int mines = 10)
 {
 }
 
+/**
+ * \brief Check the value of a square
+ *
+ * \param[in]   x         The column of the square to check.
+ * \param[in]   y         The row of the square to check.
+ *
+ * \return    The value of of the requested square
+ *
+ * \retval    'O'   The square is marked as a mine.
+ * \retval    ' '   The square is not opened.
+ * \retval    'M'   The square contains an opened mine.
+ * \retval    <int> The square is adjacent to <int> mines.
+ */
 char Board::operator()(int x, int y) const
 {
   if(mCover(x, y) == 2)
@@ -28,16 +41,34 @@ char Board::operator()(int x, int y) const
   return mBoard(x, y) + '0';
 }
 
-bool Board::is_win()
-{
-  return mMines + mNOpen == mWidth * mHeight;
-}
-
+/**
+ * \brief Check how many mines are left.
+ *
+ * \return The number of mines left to mark.
+ */
 int Board::mines_left()
 {
   return mMines - mNMarked;
 }
 
+/**
+ * \brief Try to open a square on the board
+ *
+ * \details Open a square if it's not marked as a mine. If the clicked square
+ *          doesn't border a mine all (unmarked) neighbours are opened as well.
+ *
+ * \note    The mines are added on the first call to open so it will always open a 0.
+ *
+ * \param[in]   x         The column of the square to open.
+ * \param[in]   y         The row of the square to open.
+ * \param[out]  changes   A vector of changes that was made to the board by this call.
+ *
+ * \return The state of the board after this call.
+ *
+ * \retval Board_state::play  Everything is ok, a new move can be made.
+ * \retval Board_state::win   All squares without mines are opened.
+ * \retval Board_state::loss  A mine was discovered.
+ */
 Board_state Board::open(int x, int y, std::vector<Change>& changes)
 {
   if(mNOpen == 0) {
@@ -71,6 +102,22 @@ Board_state Board::open(int x, int y, std::vector<Change>& changes)
   }
 }
 
+/**
+ * \brief Mark/unmark a square as containing a mine. Open neighbours if square is open.
+ *
+ * \details If the selected square is open and have the correct number of marked neighbours
+ *          is correct all non-marked neighbours will be opened.
+ *
+ * \param[in]   x         The column of the square to mark/unmark.
+ * \param[in]   y         The row of the square to mark/unmark.
+ * \param[out]  changes   A vector of changes that was made to the board by this call.
+ *
+ * \return The state of the board after this call.
+ *
+ * \retval Board_state::play  Everything is ok, a new move can be made.
+ * \retval Board_state::win   All squares without mines are opened.
+ * \retval Board_state::loss  A mine was discovered.
+ */
 Board_state Board::mark(int x, int y, std::vector<Change>& changes)
 {
   if(mCover(x, y) == 1) {
@@ -90,6 +137,18 @@ Board_state Board::mark(int x, int y, std::vector<Change>& changes)
   return Board_state::play;
 }
 
+/**
+ * \brief Open/mark a random square.
+ *
+ * \details Select a random square and mark or open it depending on if it contains a mine or not.
+ *
+ * \param[out]  changes   A vector of changes that was made to the board by this call.
+ *
+ * \return The state of the board after this call.
+ *
+ * \retval Board_state::play  Everything is ok, a new move can be made.
+ * \retval Board_state::win   All squares without mines are opened.
+ */
 Board_state Board::hint(std::vector<Change>& changes)
 {
   srand((unsigned) time(NULL));
@@ -106,6 +165,17 @@ Board_state Board::hint(std::vector<Change>& changes)
 
 /*************** Private ***************/
 
+/**
+* Check if all non-mine squares have been opened.
+*/
+bool Board::is_win()
+{
+  return mMines + mNOpen == mWidth * mHeight;
+}
+
+/**
+* Count number of marked adjacent squares.
+*/
 int Board::marked_adj(int x, int y)
 {
   int marked = 0;
@@ -120,6 +190,10 @@ int Board::marked_adj(int x, int y)
           ++marked;
   return marked;
 }
+
+/**
+* Open all non-marked adjacent squares.
+*/
 Board_state Board::open_adj(int x, int y, std::vector<Change>& changes)
 {
   for(int xx = -1; xx < 2; ++xx)
@@ -136,7 +210,9 @@ Board_state Board::open_adj(int x, int y, std::vector<Change>& changes)
   return Board_state::play;
 }
 
-
+/**
+* Add mMines mine to the board, the square (x, y) is guaranteed to be a 0.
+*/
 void Board::add_mines(int x, int y)
 {
   srand((unsigned) time(NULL));
@@ -153,6 +229,9 @@ void Board::add_mines(int x, int y)
   count_mines();
 }
 
+/**
+* Count number of mines currently placed on the board.
+*/
 void Board::count_mines()
 {
   for(int x = 0; x < mWidth; ++x)
@@ -163,6 +242,10 @@ void Board::count_mines()
             if(mBoard(i, j) == -1)
               ++mBoard(x, y);
 }
+
+/**
+* Print an opened version of the board, mines are -1.
+*/
 void Board::print()
 {
   for(int i = 0; i < mHeight; ++i) {
