@@ -143,8 +143,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-  int dummy = 1;
-  auto app = Gtk::Application::create(dummy, argv, "");
+  auto app = Gtk::Application::create("mkindberg.minesweeper");
   int width = 10, height = 10, mines = 15;
   if(argc == 2) {
     std::cout << argv[0] << ' ' << argv[1] << '\n';
