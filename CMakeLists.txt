@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.11)
 
 project(minesweeper)
 
-add_executable(minesweeper src/minesweeper.cpp src/matrix.cpp src/board.cpp)
+add_executable(minesweeper src/minesweeper.cpp src/board.cpp)
 
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(GTKMM REQUIRED gtkmm-3.0)

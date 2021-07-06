@@ -38,8 +38,8 @@ class Board {
     int mWidth;
     int mHeight;
     int mMines;
-    Matrix mBoard;
-    Matrix mCover;
+    Matrix<int> mBoard;
+    Matrix<int> mCover;
     int mNOpen;
     int mNMarked;
     Board_state mState;
