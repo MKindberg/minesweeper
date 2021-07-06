@@ -6,7 +6,7 @@
 
 #include "board.hpp"
 
-Board::Board(int width = 20, int height = 20, int mines = 10)
+Board::Board(int width, int height, int mines)
 : mWidth(width),
   mHeight(height),
   mMines(mines),

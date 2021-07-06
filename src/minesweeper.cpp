@@ -27,7 +27,7 @@ class MinesweeperWindow : public Gtk::ApplicationWindow {
   Board mBoard;
   bool mDisableClick;
 public:
-    MinesweeperWindow(int width = 10, int height = 10, int mines = 10)
+    MinesweeperWindow(int width, int height, int mines)
     : mBoard(width, height, mines),
       mWidth(width),
       mHeight(height),
