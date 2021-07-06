@@ -73,7 +73,6 @@ Board_state Board::open(int x, int y, std::vector<Change>& changes)
 {
   if(mNOpen == 0) {
     add_mines(x, y);
-    print();
   }
   if(mCover(x, y) == 2) {
     changes.emplace_back(x, y, 'O');

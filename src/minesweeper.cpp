@@ -1,6 +1,5 @@
 #include <vector>
 #include <iterator>
-#include <iostream>
 #include <functional>
 
 #include <gtkmm/application.h>
@@ -101,14 +100,12 @@ public:
   void win()
   {
     mStatus.set_label("Win!!");
-    std::cout << "Win!! \n";
     mDisableClick = true;
   }
 
   void loss()
   {
     mStatus.set_label("Loss!!");
-    std::cout << "Loss!! \n";
     mDisableClick = true;
   }
 
@@ -149,9 +146,7 @@ int main(int argc, char* argv[])
   auto app = Gtk::Application::create("mkindberg.minesweeper");
   int width = 10, height = 10, mines = 15;
   if(argc == 2) {
-    std::cout << argv[0] << ' ' << argv[1] << '\n';
     mines = atoi(argv[1]);
-    std::cout << "mines: " << mines << '\n';
   }
   else if(argc == 3) {
     width = atoi(argv[1]);
