@@ -145,13 +145,16 @@ public:
 int main(int argc, char* argv[])
 {
   auto app = Gtk::Application::create("mkindberg.minesweeper");
-  int width = 10, height = 10, mines = 15;
+  int width = 10, height = 10, mines = 20;
   if(argc == 2) {
     mines = atoi(argv[1]);
+    width = mines/2;
+    height = width;
   }
   else if(argc == 3) {
     width = atoi(argv[1]);
     height = atoi(argv[2]);
+    mines = width*height/5;
   }
   else if(argc == 4) {
     width = atoi(argv[1]);
