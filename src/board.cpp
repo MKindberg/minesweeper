@@ -13,7 +13,8 @@ Board::Board(int width, int height, int mines)
   mBoard(width, height),
   mCover(width, height),
   mNOpen(0),
-  mNMarked(0)
+  mNMarked(0),
+  mState(Board_state::play)
 {
 }
 
@@ -76,23 +77,25 @@ Board_state Board::open(int x, int y, std::vector<Change>& changes)
   }
   if(mCover(x, y) == 2) {
     changes.emplace_back(x, y, 'O');
-    return Board_state::play;
+    return mState;
   }
   else if(mCover(x, y) == 1) {
     changes.emplace_back(x, y, mBoard(x, y) + '0');
     if(marked_adj(x, y) == mBoard(x, y))
       return open_adj(x, y, changes);
-    return Board_state::play;
+    return mState;
   }
   mCover(x, y) = 1;
   ++mNOpen;
   if(mBoard(x, y) == -1) {
     changes.emplace_back(x, y, 'M');
-    return Board_state::loss;
+    mState = Board_state::loss;
+    return mState;
   }
   else if(is_win()) {
     changes.emplace_back(x, y, mBoard(x, y) + '0');
-    return Board_state::win;
+    mState = Board_state::win;
+    return mState;
   }
   else {
     changes.emplace_back(x, y, mBoard(x, y) + '0');
@@ -100,7 +103,7 @@ Board_state Board::open(int x, int y, std::vector<Change>& changes)
     if(mBoard(x, y) == 0) {
       return open_adj(x, y, changes);
     }
-    return Board_state::play;
+    return mState;
   }
 }
 
@@ -134,10 +137,12 @@ Board_state Board::mark(int x, int y, std::vector<Change>& changes)
     mCover(x, y) = 2;
     ++mNMarked;
     changes.emplace_back(x, y, 'O');
-    if(is_win())
-      return Board_state::win;
+    if(is_win()) {
+      mState = Board_state::win;
+      return mState;
+    }
   }
-  return Board_state::play;
+  return mState;
 }
 
 /**
@@ -154,6 +159,9 @@ Board_state Board::mark(int x, int y, std::vector<Change>& changes)
  */
 Board_state Board::hint(std::vector<Change>& changes)
 {
+  if(mState != Board_state::play)
+    return mState;
+
   srand((unsigned) time(NULL));
   int x, y;
   do {
@@ -206,11 +214,11 @@ Board_state Board::open_adj(int x, int y, std::vector<Change>& changes)
             && x+xx < mWidth
             && y+yy < mHeight
             && mCover(x+xx, y+yy) == 0) {
-        Board_state b = open(x+xx, y+yy, changes);
-        if(b != Board_state::play)
-          return b;
+        mState = open(x+xx, y+yy, changes);
+        if(mState != Board_state::play)
+          return mState;
       }
-  return Board_state::play;
+  return mState;
 }
 
 /**

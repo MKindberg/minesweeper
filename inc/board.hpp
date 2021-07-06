@@ -42,5 +42,6 @@ class Board {
     Matrix mCover;
     int mNOpen;
     int mNMarked;
+    Board_state mState;
 };
 

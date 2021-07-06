@@ -48,7 +48,8 @@ public:
         std::vector<Change> changes;
         if(mBoard.hint(changes) == Board_state::win)
           win();
-        update(changes);
+        else
+          update(changes);
       });
 
       mGrid.attach(mReset, 3, 0, 2, 1);
